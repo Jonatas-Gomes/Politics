@@ -1,0 +1,16 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: ms-party
+  sql.init.mode: always
+  datasource:
+    url: jdbc:postgresql://localhost:5432/party
+    username: postgres
+    password: root
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
