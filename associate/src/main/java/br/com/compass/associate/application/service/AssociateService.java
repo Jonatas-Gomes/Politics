@@ -4,9 +4,13 @@ import br.com.compass.associate.application.ports.in.AssociateUseCase;
 import br.com.compass.associate.application.ports.out.AssociatePortOut;
 import br.com.compass.associate.domain.dto.AssociateDTO;
 import br.com.compass.associate.domain.dto.AssociateResponse;
+import br.com.compass.associate.domain.dto.PageableResponse;
+import br.com.compass.associate.domain.enums.PoliticalOffice;
 import br.com.compass.associate.domain.model.Associate;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,4 +25,56 @@ public class AssociateService implements AssociateUseCase{
         portOut.save(associate);
         return mapper.map(associate, AssociateResponse.class);
     }
+
+    @Override
+    public PageableResponse findAll(PoliticalOffice politicalOffice, Pageable pageable) {
+        Page<Associate>page = politicalOffice == null ?
+                portOut.findAll(pageable):
+                portOut.findByPoliticalOffice(politicalOffice, pageable);
+
+        if(page.isEmpty()){
+            throw new RuntimeException("Associate not found");
+        }
+
+        return PageableResponse.builder()
+                .numberOfElements(page.getNumberOfElements())
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .associates(page.getContent())
+                .build();
+
+    }
+
+    @Override
+    public AssociateResponse findById(Long id) {
+        var associate =getAssociate(id);
+        return mapper.map(associate, AssociateResponse.class);
+    }
+
+    @Override
+    public void delete(Long id) {
+        getAssociate(id);
+        portOut.deleteById(id);
+    }
+
+    @Override
+    public AssociateResponse update(Long id, AssociateDTO associateDTO) {
+        var associate = getAssociate(id);
+
+        associate.setFullName(associateDTO.getFullName());
+        associate.setSex(associate.getSex());
+        associate.setBirthday(associateDTO.getBirthday());
+        associate.setPoliticalOffice(associateDTO.getPoliticalOffice());
+
+        portOut.save(associate);
+
+        return mapper.map(associate, AssociateResponse.class);
+    }
+
+    private Associate getAssociate(Long id){
+        return portOut.findById(id)
+                .orElseThrow(() -> new RuntimeException("Associate not found!"));
+    }
+
+
 }
