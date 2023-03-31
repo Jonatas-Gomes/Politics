@@ -6,6 +6,7 @@ import br.com.compass.party.domain.dto.PageableResponse;
 import br.com.compass.party.domain.dto.PartyDTO;
 import br.com.compass.party.domain.dto.PartyResponse;
 import br.com.compass.party.domain.enums.Ideology;
+import br.com.compass.party.domain.model.Associate;
 import br.com.compass.party.domain.model.Party;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -64,16 +65,29 @@ public class PartyService implements PartyUseCase {
         return mapper.map(party, PartyResponse.class);
     }
 
+
+
     @Override
     public void delete(String id) {
         getParty(id);
         portOut.deleteById(id);
     }
 
+    @Override
+    public PartyResponse bindAssociation(Associate associate, String idParty) {
+        var party = getParty(idParty);
+
+        party.getAssociates().add(associate);
+        portOut.save(party);
+
+        return mapper.map(party, PartyResponse.class);
+    }
+
     private Party getParty(String id){
         return portOut.findById(id)
                 .orElseThrow(()-> new RuntimeException("Party with this id not found"));
     }
+
 
     private String generateID(){
         Random generator = new Random();

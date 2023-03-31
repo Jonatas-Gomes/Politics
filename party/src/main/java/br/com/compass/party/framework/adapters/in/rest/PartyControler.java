@@ -5,6 +5,7 @@ import br.com.compass.party.domain.dto.PageableResponse;
 import br.com.compass.party.domain.dto.PartyDTO;
 import br.com.compass.party.domain.dto.PartyResponse;
 import br.com.compass.party.domain.enums.Ideology;
+import br.com.compass.party.domain.model.Associate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -39,5 +40,9 @@ public class PartyControler {
         return ResponseEntity.status(HttpStatus.OK).body(partyUseCase.update(id, partyDTO));
     }
 
+    @PostMapping("/associates")
+    public ResponseEntity<PartyResponse>bindAssociation(@RequestBody Associate associate, @RequestBody String idParty){
+        return ResponseEntity.status(HttpStatus.OK).body(partyUseCase.bindAssociation(associate, idParty));
+    }
 
 }

@@ -4,6 +4,7 @@ import br.com.compass.party.domain.dto.PageableResponse;
 import br.com.compass.party.domain.dto.PartyDTO;
 import br.com.compass.party.domain.dto.PartyResponse;
 import br.com.compass.party.domain.enums.Ideology;
+import br.com.compass.party.domain.model.Associate;
 import org.springframework.data.domain.Pageable;
 
 public interface PartyUseCase {
@@ -15,5 +16,6 @@ public interface PartyUseCase {
 
     public PartyResponse update(String id, PartyDTO partyDTO);
 
+    public PartyResponse bindAssociation(Associate associate, String idParty);
 
 }
