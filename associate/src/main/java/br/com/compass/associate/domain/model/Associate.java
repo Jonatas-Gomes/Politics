@@ -29,6 +29,8 @@ public class Associate {
     @Enumerated(EnumType.STRING)
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
     private Sex sex;
+    @ManyToOne
+    private Party party;
 
 
 }
