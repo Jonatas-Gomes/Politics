@@ -1,10 +1,9 @@
 package br.com.compass.associate.framework.adapters.in.rest;
 
 import br.com.compass.associate.application.ports.in.AssociateUseCase;
-import br.com.compass.associate.domain.dto.AssociateDTO;
-import br.com.compass.associate.domain.dto.AssociateResponse;
-import br.com.compass.associate.domain.dto.PageableResponse;
+import br.com.compass.associate.domain.dto.*;
 import br.com.compass.associate.domain.enums.PoliticalOffice;
+import br.com.compass.associate.framework.adapters.out.partyClient.PartyClient;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/associates")
 public class AssociateController {
     private final AssociateUseCase useCase;
+
+    private final PartyClient partyClient;
     @PostMapping
     public ResponseEntity<AssociateResponse> createAssociate(@RequestBody AssociateDTO associateDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(useCase.createAssociate(associateDTO));
@@ -37,5 +38,9 @@ public class AssociateController {
     public ResponseEntity delete(@PathVariable Long id){
         useCase.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+    @GetMapping("/parties")
+    public ResponseEntity<PageablePartyResponse>getParties(){
+        return ResponseEntity.status(HttpStatus.OK).body(partyClient.findAll());
     }
 }
