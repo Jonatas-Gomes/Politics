@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,5 +22,7 @@ public class Party {
     private Ideology ideology;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate foundationDate;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Associate> associates;
 
 }
