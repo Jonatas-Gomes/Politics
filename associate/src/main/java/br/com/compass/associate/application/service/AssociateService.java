@@ -4,14 +4,18 @@ import br.com.compass.associate.application.ports.in.AssociateUseCase;
 import br.com.compass.associate.application.ports.out.AssociatePortOut;
 import br.com.compass.associate.domain.dto.AssociateDTO;
 import br.com.compass.associate.domain.dto.AssociateResponse;
+import br.com.compass.associate.domain.dto.AssociationDTO;
 import br.com.compass.associate.domain.dto.PageableResponse;
 import br.com.compass.associate.domain.enums.PoliticalOffice;
 import br.com.compass.associate.domain.model.Associate;
+import br.com.compass.associate.framework.adapters.out.partyClient.PartyClient;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +23,7 @@ public class AssociateService implements AssociateUseCase{
 
     private final ModelMapper mapper;
     private final AssociatePortOut portOut;
+    private final PartyClient partyClient;
     @Override
     public AssociateResponse createAssociate(AssociateDTO associateDTO) {
         Associate associate = mapper.map(associateDTO, Associate.class);
@@ -67,6 +72,19 @@ public class AssociateService implements AssociateUseCase{
         associate.setPoliticalOffice(associateDTO.getPoliticalOffice());
 
         portOut.save(associate);
+
+        return mapper.map(associate, AssociateResponse.class);
+    }
+    @Override
+    public AssociateResponse bindAssociate(AssociationDTO associationDTO){
+        var associate = getAssociate(associationDTO.getIdAssociate());
+
+        if(associate.getParty() == null){
+            var party = Optional.of(partyClient.bindAssociation(associate, associationDTO.getIdParty()))
+                    .orElseThrow(() -> new RuntimeException("Party not found!"));
+        }else{
+            throw new RuntimeException("This associate is already affiliated to a party");
+        }
 
         return mapper.map(associate, AssociateResponse.class);
     }
