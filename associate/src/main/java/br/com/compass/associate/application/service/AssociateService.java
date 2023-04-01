@@ -82,6 +82,8 @@ public class AssociateService implements AssociateUseCase{
         if(associate.getParty() == null){
             var party = Optional.of(partyClient.bindAssociation(associate, associationDTO.getIdParty()))
                     .orElseThrow(() -> new RuntimeException("Party not found!"));
+            associate.setParty(party);
+            portOut.save(associate);
         }else{
             throw new RuntimeException("This associate is already affiliated to a party");
         }
