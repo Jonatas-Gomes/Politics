@@ -40,7 +40,7 @@ public class PartyControler {
         return ResponseEntity.status(HttpStatus.OK).body(partyUseCase.update(id, partyDTO));
     }
 
-    @PostMapping("/{id}/associates")
+    @PostMapping("/associates/{idParty}")
     public ResponseEntity<PartyResponse>bindAssociation(@RequestBody Associate associate, @PathVariable String idParty){
         return ResponseEntity.status(HttpStatus.OK).body(partyUseCase.bindAssociation(associate, idParty));
     }
