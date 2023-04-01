@@ -4,6 +4,7 @@ import br.com.compass.associate.application.ports.in.AssociateUseCase;
 import br.com.compass.associate.domain.dto.*;
 import br.com.compass.associate.domain.enums.PoliticalOffice;
 import br.com.compass.associate.framework.adapters.out.partyClient.PartyClient;
+import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.data.domain.Pageable;
@@ -42,5 +43,9 @@ public class AssociateController {
     @GetMapping("/parties")
     public ResponseEntity<PageablePartyResponse>getParties(){
         return ResponseEntity.status(HttpStatus.OK).body(partyClient.findAll());
+    }
+    @PostMapping("/parties")
+    public ResponseEntity<AssociateResponse> bindAssociation(@RequestBody AssociationDTO associationDTO){
+        return ResponseEntity.status(HttpStatus.OK).body(useCase.bindAssociate(associationDTO));
     }
 }

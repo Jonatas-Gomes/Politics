@@ -13,7 +13,7 @@ public interface PartyClient {
     @GetMapping("/parties")
     PageablePartyResponse findAll();
 
-    @PostMapping("/parties{id}/associates")
+    @PostMapping("/parties/associates/{idParty}")
     Party bindAssociation(@RequestBody Associate associate, @PathVariable String idParty);
 
 }
