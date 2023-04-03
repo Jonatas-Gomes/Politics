@@ -91,6 +91,25 @@ public class AssociateService implements AssociateUseCase{
         return mapper.map(associate, AssociateResponse.class);
     }
 
+    @Override
+    public AssociateResponse removeAssociation(Long idAssociate, String idParty) {
+        var associate = getAssociate(idAssociate);
+
+        if(associate.getParty() != null){
+            if(associate.getParty().getIdParty() == idParty){
+                associate.setParty(null);
+                portOut.save(associate);
+            }
+            else{
+                throw new RuntimeException("This associate is not associated with this party");
+            }
+        }else{
+            throw new RuntimeException("This associate is not affiliated with any party");
+        }
+
+        return mapper.map(associate, AssociateResponse.class);
+    }
+
     private Associate getAssociate(Long id){
         return portOut.findById(id)
                 .orElseThrow(() -> new RuntimeException("Associate not found!"));
