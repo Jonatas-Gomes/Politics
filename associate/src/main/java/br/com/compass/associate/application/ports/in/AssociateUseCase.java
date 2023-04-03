@@ -17,5 +17,6 @@ public interface AssociateUseCase {
 
     public AssociateResponse update(Long id, AssociateDTO associateDTO);
     public AssociateResponse bindAssociate(AssociationDTO associationDTO);
+    public AssociateResponse removeAssociation(Long idAssociate, String idParty);
 
 }
