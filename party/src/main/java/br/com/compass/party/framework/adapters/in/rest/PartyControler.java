@@ -45,4 +45,5 @@ public class PartyControler {
         return ResponseEntity.status(HttpStatus.OK).body(partyUseCase.bindAssociation(associate, idParty));
     }
 
+
 }

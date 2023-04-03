@@ -18,4 +18,6 @@ public interface PartyUseCase {
 
     public PartyResponse bindAssociation(Associate associate, String idParty);
 
+    public void deleteAssociation(String idParty, Long idAssociate);
+
 }
