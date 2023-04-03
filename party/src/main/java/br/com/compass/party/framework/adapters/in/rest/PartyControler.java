@@ -1,6 +1,7 @@
 package br.com.compass.party.framework.adapters.in.rest;
 
 import br.com.compass.party.application.ports.in.PartyUseCase;
+import br.com.compass.party.domain.dto.AssociateResponse;
 import br.com.compass.party.domain.dto.PageableResponse;
 import br.com.compass.party.domain.dto.PartyDTO;
 import br.com.compass.party.domain.dto.PartyResponse;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,6 +47,9 @@ public class PartyControler {
     public ResponseEntity<PartyResponse>bindAssociation(@RequestBody Associate associate, @PathVariable String idParty){
         return ResponseEntity.status(HttpStatus.OK).body(partyUseCase.bindAssociation(associate, idParty));
     }
-
+    @GetMapping("/{id}/associates")
+    public ResponseEntity<List<AssociateResponse>> getAffiliates(@PathVariable String id){
+        return ResponseEntity.status(HttpStatus.OK).body(partyUseCase.getAffiliates(id));
+    }
 
 }

@@ -2,6 +2,7 @@ package br.com.compass.party.application.service;
 
 import br.com.compass.party.application.ports.in.PartyUseCase;
 import br.com.compass.party.application.ports.out.PartyPortOut;
+import br.com.compass.party.domain.dto.AssociateResponse;
 import br.com.compass.party.domain.dto.PageableResponse;
 import br.com.compass.party.domain.dto.PartyDTO;
 import br.com.compass.party.domain.dto.PartyResponse;
@@ -10,6 +11,7 @@ import br.com.compass.party.domain.model.Associate;
 import br.com.compass.party.domain.model.Party;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -92,14 +94,25 @@ public class PartyService implements PartyUseCase {
 
         for(Associate associate : associates){
             if(associate.getId() == idAssociate){
-
                 associates.remove(associate);
 
                 party.setAssociates(associates);
                 portOut.save(party);
+
                 break;
             }
         }
+    }
+
+    @Override
+    public List<AssociateResponse> getAffiliates(String id) {
+        var party = getParty(id);
+        var associates = party.getAssociates();
+
+        List<AssociateResponse> response = mapper.map(associates,new TypeToken<List<AssociateResponse>>(){}.getType());
+
+        return response;
+
     }
 
     private Party getParty(String id){
