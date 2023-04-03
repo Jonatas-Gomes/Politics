@@ -110,7 +110,9 @@ public class PartyService implements PartyUseCase {
         var associates = party.getAssociates();
 
         List<AssociateResponse> response = mapper.map(associates,new TypeToken<List<AssociateResponse>>(){}.getType());
-
+        if(response.isEmpty()){
+            throw new RuntimeException("This party has no associates");
+        }
         return response;
 
     }

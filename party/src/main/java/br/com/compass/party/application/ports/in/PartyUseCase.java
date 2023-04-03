@@ -24,6 +24,6 @@ public interface PartyUseCase {
 
     public void deleteAssociation(String idParty, Long idAssociate);
 
-    public List<AssociateResponse> getAffiliates(String id;);
+    public List<AssociateResponse> getAffiliates(String id);
 
 }
