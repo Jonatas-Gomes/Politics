@@ -10,6 +10,7 @@ import br.com.compass.associate.domain.enums.PoliticalOffice;
 import br.com.compass.associate.domain.model.Associate;
 import br.com.compass.associate.framework.adapters.out.event.topic.KafkaProducer;
 import br.com.compass.associate.framework.adapters.out.partyClient.PartyClient;
+import br.com.compass.associate.framework.exception.RequestException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -44,7 +46,7 @@ public class AssociateService implements AssociateUseCase{
                 portOut.findByPoliticalOffice(politicalOffice, pageable);
 
         if(page.isEmpty()){
-            throw new RuntimeException("Associate not found");
+            throw new RequestException("Associate not found", HttpStatus.BAD_REQUEST);
         }
 
         return PageableResponse.builder()
@@ -92,7 +94,7 @@ public class AssociateService implements AssociateUseCase{
             associate.setParty(party);
             portOut.save(associate);
         }else{
-            throw new RuntimeException("This associate is already affiliated to a party");
+            throw new RequestException("This associate is already affiliated to a party", HttpStatus.BAD_REQUEST);
         }
 
         return mapper.map(associate, AssociateResponse.class);
@@ -122,10 +124,10 @@ public class AssociateService implements AssociateUseCase{
                 portOut.save(associate);
             }
             else{
-                throw new RuntimeException("This associate is not associated with this party");
+                throw new RequestException("This associate is not associated with this party", HttpStatus.BAD_REQUEST);
             }
         }else{
-            throw new RuntimeException("This associate is not affiliated with any party");
+            throw new RequestException("This associate is not affiliated with any party",HttpStatus.BAD_REQUEST);
         }
 
         return mapper.map(associate, AssociateResponse.class);
@@ -133,7 +135,7 @@ public class AssociateService implements AssociateUseCase{
 
     private Associate getAssociate(Long id){
         return portOut.findById(id)
-                .orElseThrow(() -> new RuntimeException("Associate not found!"));
+                .orElseThrow(() -> new RequestException("Associate not found!", HttpStatus.BAD_REQUEST));
     }
 
 
