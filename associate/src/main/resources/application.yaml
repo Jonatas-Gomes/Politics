@@ -14,6 +14,13 @@ spring:
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
 eureka:
   client:
     register-with-eureka: true
@@ -21,3 +28,5 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka
 
+topic:
+  associate-topic: remove_association

@@ -8,7 +8,10 @@ import br.com.compass.associate.domain.dto.AssociationDTO;
 import br.com.compass.associate.domain.dto.PageableResponse;
 import br.com.compass.associate.domain.enums.PoliticalOffice;
 import br.com.compass.associate.domain.model.Associate;
+import br.com.compass.associate.framework.adapters.out.event.topic.KafkaProducer;
 import br.com.compass.associate.framework.adapters.out.partyClient.PartyClient;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -24,6 +27,8 @@ public class AssociateService implements AssociateUseCase{
     private final ModelMapper mapper;
     private final AssociatePortOut portOut;
     private final PartyClient partyClient;
+    private final KafkaProducer kafkaProducer;
+    ObjectMapper objectMapper = new ObjectMapper();
     @Override
     public AssociateResponse createAssociate(AssociateDTO associateDTO) {
         Associate associate = mapper.map(associateDTO, Associate.class);
@@ -92,13 +97,24 @@ public class AssociateService implements AssociateUseCase{
     }
 
     @Override
-    public AssociateResponse removeAssociation(Long idAssociate, String idParty) {
+    public AssociateResponse removeAssociation(Long idAssociate, String idParty) throws JsonProcessingException {
         var associate = getAssociate(idAssociate);
 
         if(associate.getParty() != null){
             if(associate.getParty().getIdParty() == idParty){
                 associate.setParty(null);
                 portOut.save(associate);
+
+                var associationDTO = AssociationDTO
+                        .builder()
+                        .idAssociate(idAssociate)
+                        .idParty(idParty)
+                        .build();
+
+
+                String message = objectMapper.writeValueAsString(associationDTO);
+
+                kafkaProducer.sendMessage(message);
             }
             else{
                 throw new RuntimeException("This associate is not associated with this party");
