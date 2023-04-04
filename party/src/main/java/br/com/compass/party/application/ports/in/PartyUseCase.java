@@ -1,9 +1,6 @@
 package br.com.compass.party.application.ports.in;
 
-import br.com.compass.party.domain.dto.AssociateResponse;
-import br.com.compass.party.domain.dto.PageableResponse;
-import br.com.compass.party.domain.dto.PartyDTO;
-import br.com.compass.party.domain.dto.PartyResponse;
+import br.com.compass.party.domain.dto.*;
 import br.com.compass.party.domain.enums.Ideology;
 import br.com.compass.party.domain.model.Associate;
 import br.com.compass.party.domain.model.Party;
@@ -22,7 +19,7 @@ public interface PartyUseCase {
 
     public PartyResponse bindAssociation(Associate associate, String idParty);
 
-    public void deleteAssociation(String idParty, Long idAssociate);
+    public void deleteAssociation(AssociationDTO associationDTO);
 
     public List<AssociateResponse> getAffiliates(String id);
 

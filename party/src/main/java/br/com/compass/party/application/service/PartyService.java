@@ -2,10 +2,7 @@ package br.com.compass.party.application.service;
 
 import br.com.compass.party.application.ports.in.PartyUseCase;
 import br.com.compass.party.application.ports.out.PartyPortOut;
-import br.com.compass.party.domain.dto.AssociateResponse;
-import br.com.compass.party.domain.dto.PageableResponse;
-import br.com.compass.party.domain.dto.PartyDTO;
-import br.com.compass.party.domain.dto.PartyResponse;
+import br.com.compass.party.domain.dto.*;
 import br.com.compass.party.domain.enums.Ideology;
 import br.com.compass.party.domain.model.Associate;
 import br.com.compass.party.domain.model.Party;
@@ -87,13 +84,13 @@ public class PartyService implements PartyUseCase {
     }
 
     @Override
-    public void deleteAssociation(String idParty, Long idAssociate) {
-        var party = getParty(idParty);
+    public void deleteAssociation(AssociationDTO associationDTO) {
+        var party = getParty(associationDTO.getIdParty());
 
         List<Associate> associates = party.getAssociates();
 
         for(Associate associate : associates){
-            if(associate.getId() == idAssociate){
+            if(associate.getId() == associationDTO.getIdAssociate()){
                 associates.remove(associate);
 
                 party.setAssociates(associates);
