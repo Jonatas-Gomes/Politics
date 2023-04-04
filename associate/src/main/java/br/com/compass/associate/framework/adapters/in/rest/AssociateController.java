@@ -4,6 +4,7 @@ import br.com.compass.associate.application.ports.in.AssociateUseCase;
 import br.com.compass.associate.domain.dto.*;
 import br.com.compass.associate.domain.enums.PoliticalOffice;
 import br.com.compass.associate.framework.adapters.out.partyClient.PartyClient;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.Path;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,8 @@ public class AssociateController {
         return ResponseEntity.status(HttpStatus.OK).body(useCase.bindAssociate(associationDTO));
     }
     @DeleteMapping("/{idAssociate}/parties/{idParty}")
-    public ResponseEntity<AssociateResponse>removeAssociation(@PathVariable Long idAssociate, @PathVariable String idParty){
-        return null;
+    public ResponseEntity removeAssociation(@PathVariable Long idAssociate, @PathVariable String idParty) throws JsonProcessingException {
+        useCase.removeAssociation(idAssociate, idParty);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

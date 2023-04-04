@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class KafkaProducer {
     @Value("${topic.associate-topic}")
     private String topicName;
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
     public void sendMessage(String message){
         kafkaTemplate.send(topicName, message);

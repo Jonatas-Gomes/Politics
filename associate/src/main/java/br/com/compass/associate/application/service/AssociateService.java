@@ -12,6 +12,7 @@ import br.com.compass.associate.framework.adapters.out.event.topic.KafkaProducer
 import br.com.compass.associate.framework.adapters.out.partyClient.PartyClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -81,6 +82,7 @@ public class AssociateService implements AssociateUseCase{
         return mapper.map(associate, AssociateResponse.class);
     }
     @Override
+
     public AssociateResponse bindAssociate(AssociationDTO associationDTO){
         var associate = getAssociate(associationDTO.getIdAssociate());
 
@@ -97,11 +99,15 @@ public class AssociateService implements AssociateUseCase{
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public AssociateResponse removeAssociation(Long idAssociate, String idParty) throws JsonProcessingException {
         var associate = getAssociate(idAssociate);
 
+
+
         if(associate.getParty() != null){
-            if(associate.getParty().getIdParty() == idParty){
+
+            if(associate.getParty().getIdParty().equals(idParty)){
                 associate.setParty(null);
                 portOut.save(associate);
 
