@@ -103,13 +103,10 @@ public class AssociateService implements AssociateUseCase{
     public AssociateResponse removeAssociation(Long idAssociate, String idParty) throws JsonProcessingException {
         var associate = getAssociate(idAssociate);
 
-
-
         if(associate.getParty() != null){
 
             if(associate.getParty().getIdParty().equals(idParty)){
                 associate.setParty(null);
-                portOut.save(associate);
 
                 var associationDTO = AssociationDTO
                         .builder()
@@ -121,6 +118,8 @@ public class AssociateService implements AssociateUseCase{
                 String message = objectMapper.writeValueAsString(associationDTO);
 
                 kafkaProducer.sendMessage(message);
+                
+                portOut.save(associate);
             }
             else{
                 throw new RuntimeException("This associate is not associated with this party");
