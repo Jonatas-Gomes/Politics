@@ -6,6 +6,7 @@ import br.com.compass.party.domain.dto.*;
 import br.com.compass.party.domain.enums.Ideology;
 import br.com.compass.party.domain.model.Associate;
 import br.com.compass.party.domain.model.Party;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
