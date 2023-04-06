@@ -1,5 +1,6 @@
 package br.com.compass.associate.framework.exception;
 
+import feign.FeignException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.ConversionNotSupportedException;
@@ -60,5 +61,10 @@ public class AssociateExceptionHandler extends ResponseEntityExceptionHandler {
         });
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+    @ExceptionHandler(FeignException.BadRequest.class)
+    public ResponseEntity<Object> handleFeignBadRequest(FeignException.BadRequest ex){
+        var response = ErrorMessage.builder().message("Party with this id not found!").build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }
