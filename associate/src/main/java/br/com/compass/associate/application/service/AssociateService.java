@@ -7,6 +7,7 @@ import br.com.compass.associate.domain.dto.AssociateResponse;
 import br.com.compass.associate.domain.dto.AssociationDTO;
 import br.com.compass.associate.domain.dto.PageableResponse;
 import br.com.compass.associate.domain.enums.PoliticalOffice;
+import br.com.compass.associate.domain.enums.Sex;
 import br.com.compass.associate.domain.model.Associate;
 import br.com.compass.associate.framework.adapters.out.event.topic.KafkaProducer;
 import br.com.compass.associate.framework.adapters.out.partyClient.PartyClient;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.type.EnumType;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +37,9 @@ public class AssociateService implements AssociateUseCase{
     @Override
     public AssociateResponse createAssociate(AssociateDTO associateDTO) {
         Associate associate = mapper.map(associateDTO, Associate.class);
+
+       // var  politicalOffice = PoliticalOffice.valueOf(associateDTO.getPoliticalOffice())
+
         portOut.save(associate);
         return mapper.map(associate, AssociateResponse.class);
     }
@@ -75,7 +80,7 @@ public class AssociateService implements AssociateUseCase{
         var associate = getAssociate(id);
 
         associate.setFullName(associateDTO.getFullName());
-        associate.setSex(associate.getSex());
+        associate.setSex(associateDTO.getSex());
         associate.setBirthday(associateDTO.getBirthday());
         associate.setPoliticalOffice(associateDTO.getPoliticalOffice());
 

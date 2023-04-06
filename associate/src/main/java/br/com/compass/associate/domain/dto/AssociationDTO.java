@@ -1,5 +1,7 @@
 package br.com.compass.associate.domain.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -8,6 +10,10 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class AssociationDTO {
+    @NotNull
+    @NotEmpty
     private Long idAssociate;
+    @NotNull
+    @NotEmpty
     private String idParty;
 }
