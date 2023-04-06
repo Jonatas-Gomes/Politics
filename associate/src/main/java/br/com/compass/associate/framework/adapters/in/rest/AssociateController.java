@@ -5,10 +5,9 @@ import br.com.compass.associate.domain.dto.*;
 import br.com.compass.associate.domain.enums.PoliticalOffice;
 import br.com.compass.associate.framework.adapters.out.partyClient.PartyClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.Path;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +21,11 @@ public class AssociateController {
 
     private final PartyClient partyClient;
     @PostMapping
-    public ResponseEntity<AssociateResponse> createAssociate(@RequestBody AssociateDTO associateDTO){
+    public ResponseEntity<AssociateResponse> createAssociate(@RequestBody @Valid AssociateDTO associateDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(useCase.createAssociate(associateDTO));
     }
     @GetMapping
-    public ResponseEntity<PageableResponse>findAll(@RequestParam(required = false) PoliticalOffice politicalOffice, Pageable pageable){
+    public ResponseEntity<PageableResponse>findAll(@RequestParam(required = false)  PoliticalOffice politicalOffice, Pageable pageable){
         return ResponseEntity.status(HttpStatus.OK).body(useCase.findAll(politicalOffice, pageable));
     }
     @GetMapping("/{id}")
@@ -34,7 +33,7 @@ public class AssociateController {
         return ResponseEntity.status(HttpStatus.OK).body(useCase.findById(id));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<AssociateResponse> update(@PathVariable Long id, @RequestBody AssociateDTO associateDTO){
+    public ResponseEntity<AssociateResponse> update(@PathVariable Long id, @RequestBody @Valid AssociateDTO associateDTO){
         return ResponseEntity.status(HttpStatus.OK).body(useCase.update(id, associateDTO));
     }
     @DeleteMapping("/{id}")
@@ -47,7 +46,7 @@ public class AssociateController {
         return ResponseEntity.status(HttpStatus.OK).body(partyClient.findAll());
     }
     @PostMapping("/parties")
-    public ResponseEntity<AssociateResponse> bindAssociation(@RequestBody AssociationDTO associationDTO){
+    public ResponseEntity<AssociateResponse> bindAssociation(@RequestBody @Valid AssociationDTO associationDTO){
         return ResponseEntity.status(HttpStatus.OK).body(useCase.bindAssociate(associationDTO));
     }
     @DeleteMapping("/{idAssociate}/parties/{idParty}")

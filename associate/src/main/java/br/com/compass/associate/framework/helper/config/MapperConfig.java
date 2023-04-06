@@ -1,4 +1,4 @@
-package br.com.compass.associate.framework.config;
+package br.com.compass.associate.framework.helper.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
