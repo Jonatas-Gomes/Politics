@@ -11,7 +11,6 @@ import lombok.*;
 @Builder
 public class AssociationDTO {
     @NotNull
-    @NotEmpty
     private Long idAssociate;
     @NotNull
     @NotEmpty
