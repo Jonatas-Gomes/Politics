@@ -7,6 +7,7 @@ import br.com.compass.party.domain.dto.PartyDTO;
 import br.com.compass.party.domain.dto.PartyResponse;
 import br.com.compass.party.domain.enums.Ideology;
 import br.com.compass.party.domain.model.Associate;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class PartyControler {
 
     private final PartyUseCase partyUseCase;
     @PostMapping
-    public ResponseEntity<PartyResponse> createParty(@RequestBody PartyDTO partyDTO){
+    public ResponseEntity<PartyResponse> createParty(@RequestBody @Valid PartyDTO partyDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(partyUseCase.createParty(partyDTO));
     }
     @GetMapping
@@ -39,7 +40,7 @@ public class PartyControler {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
     @PutMapping("/{id}")
-    public ResponseEntity<PartyResponse> update(@PathVariable String id, @RequestBody PartyDTO partyDTO){
+    public ResponseEntity<PartyResponse> update(@PathVariable String id, @Valid @RequestBody PartyDTO partyDTO){
         return ResponseEntity.status(HttpStatus.OK).body(partyUseCase.update(id, partyDTO));
     }
 
