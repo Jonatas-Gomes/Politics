@@ -1,6 +1,7 @@
 package br.com.compass.associate.framework.exception;
 
 import feign.FeignException;
+import feign.Response;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.ConversionNotSupportedException;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.async.AsyncRequestTimeoutException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -65,6 +67,19 @@ public class AssociateExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(FeignException.BadRequest.class)
     public ResponseEntity<Object> handleFeignBadRequest(FeignException.BadRequest ex){
         var response = ErrorMessage.builder().message("Party with this id not found!").build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Object>handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex){
+        Class<?> type = ex.getRequiredType();
+        ErrorMessage response;
+
+        if(type.isEnum()){
+            response = ErrorMessage.builder().message("No politicalOffice found! , must be any of: Alderman | Mayor | State_Deputy | Federal_Deputy | Senator | Governor | President | None").build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+
+        response = ErrorMessage.builder().message(ex.getMessage()).build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }
