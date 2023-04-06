@@ -6,12 +6,14 @@ import br.com.compass.party.domain.dto.*;
 import br.com.compass.party.domain.enums.Ideology;
 import br.com.compass.party.domain.model.Associate;
 import br.com.compass.party.domain.model.Party;
+import br.com.compass.party.framework.exception.RequestException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -37,7 +39,7 @@ public class PartyService implements PartyUseCase {
                 portOut.findAll(pageable) :
                 portOut.findByIdeology(ideology, pageable);
         if(page.isEmpty()){
-            throw new RuntimeException("Parties with this ideology not found!");
+            throw new RequestException("Parties with this ideology not found!", HttpStatus.BAD_REQUEST);
         }
 
         return PageableResponse.builder()
@@ -109,7 +111,7 @@ public class PartyService implements PartyUseCase {
 
         List<AssociateResponse> response = mapper.map(associates,new TypeToken<List<AssociateResponse>>(){}.getType());
         if(response.isEmpty()){
-            throw new RuntimeException("This party has no associates");
+            throw new RequestException("This party has no associates", HttpStatus.BAD_REQUEST);
         }
         return response;
 
@@ -117,7 +119,7 @@ public class PartyService implements PartyUseCase {
 
     private Party getParty(String id){
         return portOut.findById(id)
-                .orElseThrow(()-> new RuntimeException("Party with this id not found"));
+                .orElseThrow(()-> new RequestException("Party with this id not found", HttpStatus.BAD_REQUEST));
     }
 
 
