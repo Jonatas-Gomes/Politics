@@ -18,9 +18,9 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class KafkaConsumer {
     private final AssociateUseCase useCase;
+    private final ObjectMapper mapper;
     @KafkaListener(topics = "${topic.update-topic}", groupId = "grouptwo_id")
     public void Consumer(ConsumerRecord<String, String> payload) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
 
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         mapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
