@@ -35,7 +35,7 @@ public class AssociateService implements AssociateUseCase{
     private final AssociatePortOut portOut;
     private final PartyClient partyClient;
     private final KafkaProducer kafkaProducer;
-    ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
 
     private final PartyPortOut partyPortOut;
     @Override
