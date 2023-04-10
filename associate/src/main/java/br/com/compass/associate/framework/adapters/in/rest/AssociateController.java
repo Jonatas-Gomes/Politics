@@ -33,7 +33,7 @@ public class AssociateController {
         return ResponseEntity.status(HttpStatus.OK).body(useCase.findById(id));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<AssociateResponse> update(@PathVariable Long id, @RequestBody @Valid AssociateDTO associateDTO){
+    public ResponseEntity<AssociateResponse> update(@PathVariable Long id, @RequestBody @Valid AssociateDTO associateDTO) throws JsonProcessingException {
         return ResponseEntity.status(HttpStatus.OK).body(useCase.update(id, associateDTO));
     }
     @DeleteMapping("/{id}")
