@@ -7,6 +7,7 @@ import br.com.compass.party.domain.dto.PartyDTO;
 import br.com.compass.party.domain.dto.PartyResponse;
 import br.com.compass.party.domain.enums.Ideology;
 import br.com.compass.party.domain.model.Associate;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +41,7 @@ public class PartyControler {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
     @PutMapping("/{id}")
-    public ResponseEntity<PartyResponse> update(@PathVariable String id, @Valid @RequestBody PartyDTO partyDTO){
+    public ResponseEntity<PartyResponse> update(@PathVariable String id, @Valid @RequestBody PartyDTO partyDTO) throws JsonProcessingException {
         return ResponseEntity.status(HttpStatus.OK).body(partyUseCase.update(id, partyDTO));
     }
 
