@@ -18,6 +18,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.hibernate.type.EnumType;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -38,11 +39,10 @@ public class AssociateService implements AssociateUseCase{
     private final ObjectMapper objectMapper;
 
     private final PartyPortOut partyPortOut;
+
     @Override
     public AssociateResponse createAssociate(AssociateDTO associateDTO) {
         Associate associate = mapper.map(associateDTO, Associate.class);
-
-       // var  politicalOffice = PoliticalOffice.valueOf(associateDTO.getPoliticalOffice())
 
         portOut.save(associate);
         return mapper.map(associate, AssociateResponse.class);
@@ -80,7 +80,7 @@ public class AssociateService implements AssociateUseCase{
     }
 
     @Override
-    public AssociateResponse update(Long id, AssociateDTO associateDTO) {
+    public AssociateResponse update(Long id, AssociateDTO associateDTO) throws JsonProcessingException {
         var associate = getAssociate(id);
 
         associate.setFullName(associateDTO.getFullName());
@@ -89,6 +89,11 @@ public class AssociateService implements AssociateUseCase{
         associate.setPoliticalOffice(associateDTO.getPoliticalOffice());
 
         portOut.save(associate);
+
+        if(associate.getParty()!= null){
+            String message = objectMapper.writeValueAsString(associate);
+            kafkaProducer.sendMessage(message, "update_associate");
+        }
 
         return mapper.map(associate, AssociateResponse.class);
     }
@@ -128,7 +133,7 @@ public class AssociateService implements AssociateUseCase{
 
                 String message = objectMapper.writeValueAsString(associationDTO);
 
-                kafkaProducer.sendMessage(message);
+                kafkaProducer.sendMessage(message, "remove_association");
                 
                 portOut.save(associate);
             }

@@ -17,7 +17,7 @@ public interface AssociateUseCase {
 
     public void delete(Long id);
 
-    public AssociateResponse update(Long id, AssociateDTO associateDTO);
+    public AssociateResponse update(Long id, AssociateDTO associateDTO) throws JsonProcessingException;
     public AssociateResponse bindAssociate(AssociationDTO associationDTO);
     public AssociateResponse removeAssociation(Long idAssociate, String idParty) throws JsonProcessingException;
 

@@ -38,3 +38,4 @@ eureka:
 topic:
   associate-topic: remove_association
   update-topic: update_party
+  update-associate: update_associate
