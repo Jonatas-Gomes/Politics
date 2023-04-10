@@ -2,6 +2,7 @@ package br.com.compass.associate.application.service;
 
 import br.com.compass.associate.application.ports.in.AssociateUseCase;
 import br.com.compass.associate.application.ports.out.AssociatePortOut;
+import br.com.compass.associate.application.ports.out.PartyPortOut;
 import br.com.compass.associate.domain.dto.AssociateDTO;
 import br.com.compass.associate.domain.dto.AssociateResponse;
 import br.com.compass.associate.domain.dto.AssociationDTO;
@@ -9,6 +10,7 @@ import br.com.compass.associate.domain.dto.PageableResponse;
 import br.com.compass.associate.domain.enums.PoliticalOffice;
 import br.com.compass.associate.domain.enums.Sex;
 import br.com.compass.associate.domain.model.Associate;
+import br.com.compass.associate.domain.model.Party;
 import br.com.compass.associate.framework.adapters.out.event.topic.KafkaProducer;
 import br.com.compass.associate.framework.adapters.out.partyClient.PartyClient;
 import br.com.compass.associate.framework.exception.RequestException;
@@ -34,6 +36,8 @@ public class AssociateService implements AssociateUseCase{
     private final PartyClient partyClient;
     private final KafkaProducer kafkaProducer;
     ObjectMapper objectMapper = new ObjectMapper();
+
+    private final PartyPortOut partyPortOut;
     @Override
     public AssociateResponse createAssociate(AssociateDTO associateDTO) {
         Associate associate = mapper.map(associateDTO, Associate.class);
@@ -136,6 +140,11 @@ public class AssociateService implements AssociateUseCase{
         }
 
         return mapper.map(associate, AssociateResponse.class);
+    }
+
+    @Override
+    public void updateParty(Party party) {
+        partyPortOut.save(party);
     }
 
     private Associate getAssociate(Long id){

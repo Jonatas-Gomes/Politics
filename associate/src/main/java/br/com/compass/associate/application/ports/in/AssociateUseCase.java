@@ -4,6 +4,7 @@ import br.com.compass.associate.domain.dto.AssociateResponse;
 import br.com.compass.associate.domain.dto.AssociationDTO;
 import br.com.compass.associate.domain.dto.PageableResponse;
 import br.com.compass.associate.domain.enums.PoliticalOffice;
+import br.com.compass.associate.domain.model.Party;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.data.domain.Pageable;
 
@@ -20,4 +21,5 @@ public interface AssociateUseCase {
     public AssociateResponse bindAssociate(AssociationDTO associationDTO);
     public AssociateResponse removeAssociation(Long idAssociate, String idParty) throws JsonProcessingException;
 
+    void updateParty(Party party);
 }
