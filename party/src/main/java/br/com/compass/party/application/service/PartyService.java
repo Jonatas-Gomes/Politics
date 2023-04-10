@@ -1,6 +1,7 @@
 package br.com.compass.party.application.service;
 
 import br.com.compass.party.application.ports.in.PartyUseCase;
+import br.com.compass.party.application.ports.out.AssociatePortOut;
 import br.com.compass.party.application.ports.out.PartyPortOut;
 import br.com.compass.party.domain.dto.*;
 import br.com.compass.party.domain.enums.Ideology;
@@ -33,6 +34,8 @@ public class PartyService implements PartyUseCase {
     private final KafkaProducer kafkaProducer;
 
     private final ObjectMapper objectMapper;
+
+    private final AssociatePortOut associatePortOut;
     @Override
     public PartyResponse createParty(PartyDTO partyDTO) {
         Party party = mapper.map(partyDTO, Party.class);
@@ -128,6 +131,11 @@ public class PartyService implements PartyUseCase {
         }
         return response;
 
+    }
+
+    @Override
+    public void updateAssociate(Associate associate) {
+        associatePortOut.save(associate);
     }
 
     private Party getParty(String id){

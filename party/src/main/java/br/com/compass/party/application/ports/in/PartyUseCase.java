@@ -24,4 +24,5 @@ public interface PartyUseCase {
 
     public List<AssociateResponse> getAffiliates(String id);
 
+    public void updateAssociate(Associate associate);
 }
