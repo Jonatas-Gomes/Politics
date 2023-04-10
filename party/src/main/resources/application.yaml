@@ -31,3 +31,4 @@ eureka:
 
 topic:
   party-topic: remove_association
+  update-topic: update_party

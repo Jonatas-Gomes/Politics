@@ -4,6 +4,7 @@ import br.com.compass.party.domain.dto.*;
 import br.com.compass.party.domain.enums.Ideology;
 import br.com.compass.party.domain.model.Associate;
 import br.com.compass.party.domain.model.Party;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface PartyUseCase {
     void delete(String id);
     public PartyResponse findById(String id);
 
-    public PartyResponse update(String id, PartyDTO partyDTO);
+    public PartyResponse update(String id, PartyDTO partyDTO) throws JsonProcessingException;
 
     public PartyResponse bindAssociation(Associate associate, String idParty);
 

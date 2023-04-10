@@ -6,7 +6,11 @@ import br.com.compass.party.domain.dto.*;
 import br.com.compass.party.domain.enums.Ideology;
 import br.com.compass.party.domain.model.Associate;
 import br.com.compass.party.domain.model.Party;
+import br.com.compass.party.framework.adapters.in.event.topic.listener.KafkaConsumer;
+import br.com.compass.party.framework.adapters.out.event.topic.KafkaProducer;
 import br.com.compass.party.framework.exception.RequestException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -25,6 +29,10 @@ public class PartyService implements PartyUseCase {
 
     private final ModelMapper mapper;
     private final PartyPortOut portOut;
+
+    private final KafkaProducer kafkaProducer;
+
+    ObjectMapper objectMapper = new ObjectMapper();
     @Override
     public PartyResponse createParty(PartyDTO partyDTO) {
         Party party = mapper.map(partyDTO, Party.class);
@@ -55,7 +63,7 @@ public class PartyService implements PartyUseCase {
     }
 
     @Override
-    public PartyResponse update(String id, PartyDTO partyDTO) {
+    public PartyResponse update(String id, PartyDTO partyDTO) throws JsonProcessingException {
         var party = getParty(id);
 
         party.setPartyName(partyDTO.getPartyName());
@@ -64,6 +72,11 @@ public class PartyService implements PartyUseCase {
         party.setFoundationDate(partyDTO.getFoundationDate());
 
         portOut.save(party);
+
+        if(party.getAssociates() != null){
+            String message = objectMapper.writeValueAsString(party);
+            kafkaProducer.sendMessage(message);
+        }
 
         return mapper.map(party, PartyResponse.class);
     }
