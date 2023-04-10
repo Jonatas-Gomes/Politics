@@ -32,7 +32,7 @@ public class PartyService implements PartyUseCase {
 
     private final KafkaProducer kafkaProducer;
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper;
     @Override
     public PartyResponse createParty(PartyDTO partyDTO) {
         Party party = mapper.map(partyDTO, Party.class);
