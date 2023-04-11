@@ -26,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -37,13 +38,14 @@ public class AssociateService implements AssociateUseCase{
     private final PartyClient partyClient;
     private final KafkaProducer kafkaProducer;
     private final ObjectMapper objectMapper;
-
     private final PartyPortOut partyPortOut;
 
     @Override
     public AssociateResponse createAssociate(AssociateDTO associateDTO) {
+        if(associateDTO.getBirthday().isAfter(LocalDate.now())){
+            throw new RequestException("invalid birthday", HttpStatus.BAD_REQUEST);
+        }
         Associate associate = mapper.map(associateDTO, Associate.class);
-
         portOut.save(associate);
         return mapper.map(associate, AssociateResponse.class);
     }
@@ -83,6 +85,10 @@ public class AssociateService implements AssociateUseCase{
     public AssociateResponse update(Long id, AssociateDTO associateDTO) throws JsonProcessingException {
         var associate = getAssociate(id);
 
+        if(associateDTO.getBirthday().isAfter(LocalDate.now())){
+            throw new RequestException("invalid birthday", HttpStatus.BAD_REQUEST);
+        }
+
         associate.setFullName(associateDTO.getFullName());
         associate.setSex(associateDTO.getSex());
         associate.setBirthday(associateDTO.getBirthday());
@@ -109,7 +115,6 @@ public class AssociateService implements AssociateUseCase{
         }else{
             throw new RequestException("This associate is already affiliated to a party", HttpStatus.BAD_REQUEST);
         }
-
         return mapper.map(associate, AssociateResponse.class);
     }
 
