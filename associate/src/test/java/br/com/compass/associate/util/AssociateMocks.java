@@ -14,7 +14,6 @@ public class AssociateMocks {
 
     private static final LocalDate DATE = LocalDate.of(1999, 10, 27);
     private static final Long ID = 1l;
-
     private static final String ID_PARTY = "p416203";
 
     public static AssociateDTO getAssociateDTO(){
