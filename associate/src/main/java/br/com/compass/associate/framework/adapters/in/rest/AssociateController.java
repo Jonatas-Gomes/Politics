@@ -6,7 +6,6 @@ import br.com.compass.associate.domain.enums.PoliticalOffice;
 import br.com.compass.associate.framework.adapters.out.partyClient.PartyClient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

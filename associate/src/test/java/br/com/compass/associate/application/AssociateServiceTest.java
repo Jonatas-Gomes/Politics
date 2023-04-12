@@ -3,7 +3,7 @@ package br.com.compass.associate.application;
 import br.com.compass.associate.application.ports.out.AssociatePortOut;
 import br.com.compass.associate.application.ports.out.PartyPortOut;
 import br.com.compass.associate.application.service.AssociateService;
-import br.com.compass.associate.domain.dto.AssociateResponse;
+import br.com.compass.associate.application.service.utils.MapperUtils;
 import br.com.compass.associate.domain.dto.PageableResponse;
 import br.com.compass.associate.domain.enums.PoliticalOffice;
 import br.com.compass.associate.domain.model.Associate;
@@ -15,12 +15,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.apache.http.impl.execchain.RequestAbortedException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -49,6 +50,8 @@ public class AssociateServiceTest {
     private ModelMapper mapper;
     @Mock
     private ObjectMapper objectMapper;
+    @Mock
+    private MapperUtils mapperUtils;
 
     private static final Long ID = 1l;
     private static final String ID_PARTY = "p416203";
@@ -63,9 +66,8 @@ public class AssociateServiceTest {
         var associateResponse = AssociateMocks.getAssociateResponse();
         var associate = AssociateMocks.getAssociate();
 
-        when(mapper.map(associate, AssociateResponse.class)).thenReturn(associateResponse);
-        when(mapper.map(associateDTO, Associate.class)).thenReturn(associate);
-
+        when(mapperUtils.mapAssociateToAssociateResponse(associate)).thenReturn(associateResponse);
+        when(mapperUtils.mapAssociateDtoToAssociate(associateDTO)).thenReturn(associate);
         when(portOut.save(associate)).thenReturn(associate);
 
         var response = service.createAssociate(associateDTO);
@@ -89,7 +91,8 @@ public class AssociateServiceTest {
         var associateResponse = AssociateMocks.getAssociateResponse();
         var associate = AssociateMocks.getAssociate();
 
-        when(mapper.map(associate, AssociateResponse.class)).thenReturn(associateResponse);
+        when(mapperUtils.mapAssociateToAssociateResponse(associate)).thenReturn(associateResponse);
+        when(mapperUtils.associateUpdateMapping(associate, associateDTO)).thenReturn(associate);
 
         when(portOut.findById(ID)).thenReturn(Optional.of(associate));
         when(portOut.save(associate)).thenReturn(associate);
@@ -128,7 +131,8 @@ public class AssociateServiceTest {
         var associateResponse = AssociateMocks.getAssociateResponse();
         var associate = AssociateMocks.getAssociateWithParty();
 
-        when(mapper.map(associate, AssociateResponse.class)).thenReturn(associateResponse);
+        when(mapperUtils.associateUpdateMapping(associate, associateDTO)).thenReturn(associate);
+        when(mapperUtils.mapAssociateToAssociateResponse(associate)).thenReturn(associateResponse);
         when(portOut.findById(ID)).thenReturn(Optional.of(associate));
         when(portOut.save(associate)).thenReturn(associate);
 
@@ -145,7 +149,7 @@ public class AssociateServiceTest {
         var associate = AssociateMocks.getAssociate();
         var associateResponse = AssociateMocks.getAssociateResponse();
         when(portOut.findById(ID)).thenReturn(Optional.of(associate));
-        when(mapper.map(associate, AssociateResponse.class)).thenReturn(associateResponse);
+        when(mapperUtils.mapAssociateToAssociateResponse(associate)).thenReturn(associateResponse);
 
         var response = service.findById(ID);
 
@@ -230,11 +234,11 @@ public class AssociateServiceTest {
     @Test
     void BindAssociateTest(){
         var associate = AssociateMocks.getAssociate();
-        var associareResponse = AssociateMocks.getAssociateResponse();
+        var associateResponse = AssociateMocks.getAssociateResponse();
         var party = AssociateMocks.getParty();
         var associationDTO = AssociateMocks.getAssociationDTO();
 
-        when(mapper.map(associate, AssociateResponse.class)).thenReturn(associareResponse);
+        when(mapperUtils.mapAssociateToAssociateResponse(associate)).thenReturn(associateResponse);
         when(portOut.findById(anyLong())).thenReturn(Optional.of(associate));
         when(client.bindAssociation(associate, ID_PARTY)).thenReturn(party);
         when(portOut.save(associate)).thenReturn(associate);
@@ -269,7 +273,11 @@ public class AssociateServiceTest {
     void removeAssociationTest() throws JsonProcessingException {
         var associateWithParty = AssociateMocks.getAssociateWithParty();
         var associate = AssociateMocks.getAssociate();
+        var associateResponse = AssociateMocks.getAssociateResponse();
+        var associationDTO = AssociateMocks.getAssociationDTO();
 
+        when(mapperUtils.associationDTOBuilder(ID, ID_PARTY)).thenReturn(associationDTO);
+        when(mapperUtils.mapAssociateToAssociateResponse(associate)).thenReturn(associateResponse);
         when(portOut.save(associateWithParty)).thenReturn(associate);
         when(portOut.findById(anyLong())).thenReturn(Optional.of(associateWithParty));
         doNothing().when(kafkaProducer).sendMessage(any(), any());

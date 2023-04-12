@@ -1,7 +1,5 @@
 package br.com.compass.associate.application.ports.out;
 
-import br.com.compass.associate.domain.dto.AssociateDTO;
-import br.com.compass.associate.domain.dto.AssociateResponse;
 import br.com.compass.associate.domain.enums.PoliticalOffice;
 import br.com.compass.associate.domain.model.Associate;
 import org.springframework.data.domain.Page;
