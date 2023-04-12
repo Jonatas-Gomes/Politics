@@ -3,12 +3,12 @@ package br.com.compass.associate.application.service;
 import br.com.compass.associate.application.ports.in.AssociateUseCase;
 import br.com.compass.associate.application.ports.out.AssociatePortOut;
 import br.com.compass.associate.application.ports.out.PartyPortOut;
+import br.com.compass.associate.application.service.utils.MapperUtils;
 import br.com.compass.associate.domain.dto.AssociateDTO;
 import br.com.compass.associate.domain.dto.AssociateResponse;
 import br.com.compass.associate.domain.dto.AssociationDTO;
 import br.com.compass.associate.domain.dto.PageableResponse;
 import br.com.compass.associate.domain.enums.PoliticalOffice;
-import br.com.compass.associate.domain.enums.Sex;
 import br.com.compass.associate.domain.model.Associate;
 import br.com.compass.associate.domain.model.Party;
 import br.com.compass.associate.framework.adapters.out.event.topic.KafkaProducer;
@@ -18,9 +18,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
-import org.hibernate.type.EnumType;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -33,21 +30,23 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AssociateService implements AssociateUseCase{
 
-    private final ModelMapper mapper;
     private final AssociatePortOut portOut;
     private final PartyClient partyClient;
     private final KafkaProducer kafkaProducer;
     private final ObjectMapper objectMapper;
     private final PartyPortOut partyPortOut;
 
+    private final MapperUtils mapperUtils;
+
     @Override
     public AssociateResponse createAssociate(AssociateDTO associateDTO) {
         if(associateDTO.getBirthday().isAfter(LocalDate.now())){
             throw new RequestException("invalid birthday", HttpStatus.BAD_REQUEST);
         }
-        Associate associate = mapper.map(associateDTO, Associate.class);
+        var associate = mapperUtils.mapAssociateDtoToAssociate(associateDTO);
         portOut.save(associate);
-        return mapper.map(associate, AssociateResponse.class);
+        return mapperUtils.mapAssociateToAssociateResponse(associate);
+
     }
 
     @Override
@@ -72,7 +71,7 @@ public class AssociateService implements AssociateUseCase{
     @Override
     public AssociateResponse findById(Long id) {
         var associate =getAssociate(id);
-        return mapper.map(associate, AssociateResponse.class);
+        return mapperUtils.mapAssociateToAssociateResponse(associate);
     }
 
     @Override
@@ -89,10 +88,7 @@ public class AssociateService implements AssociateUseCase{
             throw new RequestException("invalid birthday", HttpStatus.BAD_REQUEST);
         }
 
-        associate.setFullName(associateDTO.getFullName());
-        associate.setSex(associateDTO.getSex());
-        associate.setBirthday(associateDTO.getBirthday());
-        associate.setPoliticalOffice(associateDTO.getPoliticalOffice());
+        mapperUtils.associateUpdateMapping(associate, associateDTO);
 
         portOut.save(associate);
 
@@ -101,7 +97,7 @@ public class AssociateService implements AssociateUseCase{
             kafkaProducer.sendMessage(message, "update_associate");
         }
 
-        return mapper.map(associate, AssociateResponse.class);
+        return mapperUtils.mapAssociateToAssociateResponse(associate);
     }
     @Override
 
@@ -115,7 +111,7 @@ public class AssociateService implements AssociateUseCase{
         }else{
             throw new RequestException("This associate is already affiliated to a party", HttpStatus.BAD_REQUEST);
         }
-        return mapper.map(associate, AssociateResponse.class);
+        return mapperUtils.mapAssociateToAssociateResponse(associate);
     }
 
     @Override
@@ -127,16 +123,9 @@ public class AssociateService implements AssociateUseCase{
 
             if(associate.getParty().getIdParty().equals(idParty)){
                 associate.setParty(null);
-
-                var associationDTO = AssociationDTO
-                        .builder()
-                        .idAssociate(idAssociate)
-                        .idParty(idParty)
-                        .build();
-
+                var associationDTO = mapperUtils.associationDTOBuilder(idAssociate, idParty);
 
                 String message = objectMapper.writeValueAsString(associationDTO);
-
                 kafkaProducer.sendMessage(message, "remove_association");
                 
                 portOut.save(associate);
@@ -148,7 +137,7 @@ public class AssociateService implements AssociateUseCase{
             throw new RequestException("This associate is not affiliated with any party",HttpStatus.BAD_REQUEST);
         }
 
-        return mapper.map(associate, AssociateResponse.class);
+        return mapperUtils.mapAssociateToAssociateResponse(associate);
     }
 
     @Override
