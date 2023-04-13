@@ -3,6 +3,7 @@ package br.com.compass.party.application.service;
 import br.com.compass.party.application.ports.in.PartyUseCase;
 import br.com.compass.party.application.ports.out.AssociatePortOut;
 import br.com.compass.party.application.ports.out.PartyPortOut;
+import br.com.compass.party.application.service.utils.MapperUtils;
 import br.com.compass.party.domain.dto.*;
 import br.com.compass.party.domain.enums.Ideology;
 import br.com.compass.party.domain.model.Associate;
@@ -36,12 +37,16 @@ public class PartyService implements PartyUseCase {
     private final ObjectMapper objectMapper;
 
     private final AssociatePortOut associatePortOut;
+
+    private final MapperUtils mapperUtils;
     @Override
     public PartyResponse createParty(PartyDTO partyDTO) {
-        Party party = mapper.map(partyDTO, Party.class);
+        var party = mapperUtils.dtoToPartyModel(partyDTO);
+
         party.setIdParty(generateID());
         portOut.save(party);
-        return mapper.map(party, PartyResponse.class);
+
+        return mapperUtils.modelToPartyResponse(party);
     }
 
     @Override
@@ -62,26 +67,22 @@ public class PartyService implements PartyUseCase {
     }
     @Override
     public PartyResponse findById(String id){
-        return mapper.map(getParty(id), PartyResponse.class);
+        return mapperUtils.modelToPartyResponse(getParty(id));
     }
 
     @Override
     public PartyResponse update(String id, PartyDTO partyDTO) throws JsonProcessingException {
         var party = getParty(id);
 
-        party.setPartyName(partyDTO.getPartyName());
-        party.setAcronym(partyDTO.getAcronym());
-        party.setIdeology(partyDTO.getIdeology());
-        party.setFoundationDate(partyDTO.getFoundationDate());
+        mapperUtils.updatePartyMapping(party, partyDTO);
 
         portOut.save(party);
-
-        if(party.getAssociates() != null){
+        if(!party.getAssociates().isEmpty() ){
             String message = objectMapper.writeValueAsString(party);
             kafkaProducer.sendMessage(message);
         }
 
-        return mapper.map(party, PartyResponse.class);
+        return mapperUtils.modelToPartyResponse(party);
     }
 
 
@@ -99,7 +100,7 @@ public class PartyService implements PartyUseCase {
         party.getAssociates().add(associate);
         portOut.save(party);
 
-        return mapper.map(party, PartyResponse.class);
+        return mapperUtils.modelToPartyResponse(party);
     }
 
     @Override
@@ -125,7 +126,7 @@ public class PartyService implements PartyUseCase {
         var party = getParty(id);
         var associates = party.getAssociates();
 
-        List<AssociateResponse> response = mapper.map(associates,new TypeToken<List<AssociateResponse>>(){}.getType());
+        var response = mapperUtils.listAssociatestoListResponse(associates);
         if(response.isEmpty()){
             throw new RequestException("This party has no associates", HttpStatus.BAD_REQUEST);
         }
