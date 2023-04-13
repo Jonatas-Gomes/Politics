@@ -1,7 +1,9 @@
 package br.com.compass.party.domain.dto;
 
 import br.com.compass.party.domain.enums.Ideology;
+import br.com.compass.party.framework.config.LocalDateDeserializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotEmpty;
@@ -25,5 +27,7 @@ public class PartyDTO {
     @NotNull(message = "must be Right, Center or Left")
     private Ideology ideology;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @NotNull
     private LocalDate foundationDate;
 }
