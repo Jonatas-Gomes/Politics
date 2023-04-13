@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
 
@@ -42,6 +43,10 @@ public class PartyService implements PartyUseCase {
     @Override
     public PartyResponse createParty(PartyDTO partyDTO) {
         var party = mapperUtils.dtoToPartyModel(partyDTO);
+
+        if(partyDTO.getFoundationDate().isAfter(LocalDate.now())){
+            throw new RequestException("invalid foundationDate", HttpStatus.BAD_REQUEST);
+        }
 
         party.setIdParty(generateID());
         portOut.save(party);
@@ -73,6 +78,10 @@ public class PartyService implements PartyUseCase {
     @Override
     public PartyResponse update(String id, PartyDTO partyDTO) throws JsonProcessingException {
         var party = getParty(id);
+
+        if(partyDTO.getFoundationDate().isAfter(LocalDate.now())){
+            throw new RequestException("invalid foundationDate", HttpStatus.BAD_REQUEST);
+        }
 
         mapperUtils.updatePartyMapping(party, partyDTO);
 
