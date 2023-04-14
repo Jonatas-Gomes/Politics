@@ -3,7 +3,6 @@ package br.com.compass.party.application.ports.in;
 import br.com.compass.party.domain.dto.*;
 import br.com.compass.party.domain.enums.Ideology;
 import br.com.compass.party.domain.model.Associate;
-import br.com.compass.party.domain.model.Party;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.data.domain.Pageable;
 

@@ -1,6 +1,5 @@
 package br.com.compass.party.application.ports.out;
 
-import br.com.compass.party.domain.dto.PartyResponse;
 import br.com.compass.party.domain.enums.Ideology;
 import br.com.compass.party.domain.model.Party;
 import org.springframework.data.domain.Page;

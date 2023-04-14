@@ -8,15 +8,11 @@ import br.com.compass.party.domain.dto.*;
 import br.com.compass.party.domain.enums.Ideology;
 import br.com.compass.party.domain.model.Associate;
 import br.com.compass.party.domain.model.Party;
-import br.com.compass.party.framework.adapters.in.event.topic.listener.KafkaConsumer;
 import br.com.compass.party.framework.adapters.out.event.topic.KafkaProducer;
 import br.com.compass.party.framework.exception.RequestException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -30,7 +26,6 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class PartyService implements PartyUseCase {
 
-    private final ModelMapper mapper;
     private final PartyPortOut portOut;
 
     private final KafkaProducer kafkaProducer;
