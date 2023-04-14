@@ -42,11 +42,11 @@ public class PartyService implements PartyUseCase {
     private final MapperUtils mapperUtils;
     @Override
     public PartyResponse createParty(PartyDTO partyDTO) {
-        var party = mapperUtils.dtoToPartyModel(partyDTO);
-
         if(partyDTO.getFoundationDate().isAfter(LocalDate.now())){
             throw new RequestException("invalid foundationDate", HttpStatus.BAD_REQUEST);
         }
+
+        var party = mapperUtils.dtoToPartyModel(partyDTO);
 
         party.setIdParty(generateID());
         portOut.save(party);
@@ -77,16 +77,18 @@ public class PartyService implements PartyUseCase {
 
     @Override
     public PartyResponse update(String id, PartyDTO partyDTO) throws JsonProcessingException {
-        var party = getParty(id);
 
         if(partyDTO.getFoundationDate().isAfter(LocalDate.now())){
             throw new RequestException("invalid foundationDate", HttpStatus.BAD_REQUEST);
         }
 
+        var party = getParty(id);
+
         mapperUtils.updatePartyMapping(party, partyDTO);
 
         portOut.save(party);
-        if(!party.getAssociates().isEmpty() ){
+
+        if(!party.getAssociates().isEmpty()){
             String message = objectMapper.writeValueAsString(party);
             kafkaProducer.sendMessage(message);
         }
@@ -124,7 +126,6 @@ public class PartyService implements PartyUseCase {
 
                 party.setAssociates(associates);
                 portOut.save(party);
-
                 break;
             }
         }
@@ -152,7 +153,6 @@ public class PartyService implements PartyUseCase {
         return portOut.findById(id)
                 .orElseThrow(()-> new RequestException("Party with this id not found", HttpStatus.BAD_REQUEST));
     }
-
 
     private String generateID(){
         Random generator = new Random();
