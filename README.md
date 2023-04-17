@@ -18,10 +18,10 @@
 ## TECNOLOGIAS UTILIZADAS NO PROJETO
 - Kafka 
 - OPEN-FEIGN 
+- Eureka Server
 - ModelMapper
 - Lombok
-- MongoDB
-- MySQL
+- PostGre
 - Junit 5 
 - Postman
 - Spring Boot
