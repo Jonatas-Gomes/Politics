@@ -1,0 +1,673 @@
+{
+	"info": {
+		"_postman_id": "bf54a53c-43b6-4665-8c1e-388a75870800",
+		"name": "Microservice Party",
+		"description": "API to register and manage parties\n\nContact Support:\n Name: Dev\n Email: jonata.gomes2014@hotmail.com",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "parties",
+			"item": [
+				{
+					"name": "{id}",
+					"item": [
+						{
+							"name": "Update party",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"partyName\": \"Partido Verde\",\n  \"acronym\": \"PV\",\n  \"ideology\": \"Center\",\n  \"foundationDate\": \"2002-08-09\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/parties/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"parties",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "p410610",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK!",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"partyName\": \"Partido Verde\",\n  \"acronym\": \"PV\",\n  \"ideology\": \"<string>\",\n  \"foundationDate\": \"2002-08-09\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/parties/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"parties",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "p410610",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"idParty\": \"p410610\",\n  \"partyName\": \"Partido Verde\",\n  \"acronym\": \"PV\",\n  \"ideology\": \"Center\",\n  \"foundationDate\": \"1998-05-05\"\n}"
+								},
+								{
+									"name": "BeanValidation | RequestException",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"partyName\": \"Partido Verde\",\n  \"acronym\": \"PV\",\n  \"ideology\": \"<string>\",\n  \"foundationDate\": \"2002-08-09\"\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/parties/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"parties",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "p410610",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"timestamp\": \"1948-09-02T18:58:52.285Z\",\n  \"message\": \"Party with id not found\"\n}"
+								}
+							]
+						},
+						{
+							"name": "Find one party",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/parties/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"parties",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "p410610",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK!",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/parties/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"parties",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "p410610",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"idParty\": \"p410610\",\n  \"partyName\": \"Partido Verde\",\n  \"acronym\": \"PV\",\n  \"ideology\": \"Center\",\n  \"foundationDate\": \"1998-05-05\"\n}"
+								},
+								{
+									"name": "BeanValidation | RequestException",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/parties/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"parties",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "p410610",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"timestamp\": \"1948-09-02T18:58:52.285Z\",\n  \"message\": \"Party with id not found\"\n}"
+								}
+							]
+						},
+						{
+							"name": "delete one party",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/parties/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"parties",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "p410610",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "No Content",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/parties/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"parties",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "p410610",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "No Content",
+									"code": 204,
+									"_postman_previewlanguage": "text",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "text/plain"
+										}
+									],
+									"cookie": [],
+									"body": ""
+								},
+								{
+									"name": "BeanValidation | RequestException",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/parties/:id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"parties",
+												":id"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "p410610",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"timestamp\": \"1948-09-02T18:58:52.285Z\",\n  \"message\": \"Party with id not found\"\n}"
+								}
+							]
+						},
+						{
+							"name": "List all associates of a party",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/parties/:id/associates",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"parties",
+										":id",
+										"associates"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "p410610",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "OK!",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/parties/:id/associates",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"parties",
+												":id",
+												"associates"
+											],
+											"variable": [
+												{
+													"key": "id",
+													"value": "p410610",
+													"description": "(Required) "
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "[\n  {\n    \"id\": 1,\n    \"fullName\": \"Ednaldo Pereira\",\n    \"politicalOffice\": \"Federal_Deputy\",\n    \"birthday\": \"1985-06-03\",\n    \"sex\": \"Female\"\n  },\n  {\n    \"id\": 1,\n    \"fullName\": \"Ednaldo Pereira\",\n    \"politicalOffice\": \"President\",\n    \"birthday\": \"2020-11-01\",\n    \"sex\": \"Female\"\n  }\n]"
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Returns all parties",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/parties?page=0&size=20",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"parties"
+							],
+							"query": [
+								{
+									"key": "ideology",
+									"value": "Center",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"description": "(Required) "
+								},
+								{
+									"key": "size",
+									"value": "20",
+									"description": "(Required) "
+								},
+								{
+									"key": "sort",
+									"value": "",
+									"description": "(Required) ",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "OK!",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/parties?ideology=<string>&page=0&size=20&sort=<string>,<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"parties"
+									],
+									"query": [
+										{
+											"key": "ideology",
+											"value": "<string>"
+										},
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "20"
+										},
+										{
+											"key": "sort",
+											"value": "<string>,<string>"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"numberOfElements\": -26161072,\n  \"totalElements\": -7877599,\n  \"totalPages\": -4433529,\n  \"parties\": [\n    {\n      \"idParty\": \"p410610\",\n      \"partyName\": \"Partido Verde\",\n      \"acronym\": \"PV\",\n      \"ideology\": \"Center\",\n      \"foundationDate\": \"1963-01-15\"\n    },\n    {\n      \"idParty\": \"p410450\",\n      \"partyName\": \"Partido Comunista do Brasil\",\n      \"acronym\": \"PCdoB\",\n      \"ideology\": \"Left\",\n      \"foundationDate\": \"1961-06-09\"\n    }\n  ]\n}"
+						},
+						{
+							"name": "BeanValidation | RequestException",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/parties?ideology=<string>&page=0&size=20&sort=<string>,<string>",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"parties"
+									],
+									"query": [
+										{
+											"key": "ideology",
+											"value": "<string>"
+										},
+										{
+											"key": "page",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "20"
+										},
+										{
+											"key": "sort",
+											"value": "<string>,<string>"
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"timestamp\": \"1948-09-02T18:58:52.285Z\",\n  \"message\": \"Party with id not found\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Create new party",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"partyName\": \"Partido Verde\",\n  \"acronym\": \"PV\",\n  \"ideology\": \"Right\",\n  \"foundationDate\": \"2002-08-09\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/parties",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"parties"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "created!",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"partyName\": \"Partido Verde\",\n  \"acronym\": \"PV\",\n  \"ideology\": \"<string>\",\n  \"foundationDate\": \"2002-08-09\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/parties",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"parties"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"idParty\": \"p410610\",\n  \"partyName\": \"Partido Verde\",\n  \"acronym\": \"PV\",\n  \"ideology\": \"Center\",\n  \"foundationDate\": \"1998-05-05\"\n}"
+						},
+						{
+							"name": "BeanValidation | RequestException",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"partyName\": \"Partido Verde\",\n  \"acronym\": \"PV\",\n  \"ideology\": \"<string>\",\n  \"foundationDate\": \"2002-08-09\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/parties",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"parties"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"timestamp\": \"1948-09-02T18:58:52.285Z\",\n  \"message\": \"Party with id not found\"\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8081",
+			"type": "string"
+		}
+	]
+}
