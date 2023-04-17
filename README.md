@@ -158,7 +158,7 @@
   curl --location 'localhost:8082/associates/parties'
  ```
  - #### GET PARTIES RESPONSE
- <img width="584" alt="image" src="https://user-images.githubusercontent.com/57242457/232565375-00d49cdb-b677-45eb-b836-39c023759ede.png"> 
+<img width="584" alt="image" src="https://user-images.githubusercontent.com/57242457/232565375-00d49cdb-b677-45eb-b836-39c023759ede.png"> 
  
  - #### POST BIND ASSOCIATE
   ```
@@ -172,7 +172,7 @@
 }'
   
   ```
-  <img width="652" alt="image" src="https://user-images.githubusercontent.com/57242457/232566578-2487e449-94d7-48fc-9c61-6907ca8377c5.png">
+<img width="652" alt="image" src="https://user-images.githubusercontent.com/57242457/232566578-2487e449-94d7-48fc-9c61-6907ca8377c5.png">
  
 - #### POST BIND ASSOCIATE RESPONSE
 <img width="590" alt="image" src="https://user-images.githubusercontent.com/57242457/232566461-eec6ca02-a24b-426b-a76b-d2b1991c0144.png">
