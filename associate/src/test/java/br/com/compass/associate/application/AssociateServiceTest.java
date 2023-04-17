@@ -117,9 +117,6 @@ public class AssociateServiceTest {
     void should_RequestExceptionWhenTryUpdateAssociateWithBirthDayInvalid(){
         var associateDTO = AssociateMocks.getAssociateDTO();
         associateDTO.setBirthday(LocalDate.of(2025, 12, 31));
-        var associate = AssociateMocks.getAssociate();
-
-        when(portOut.findById(ID)).thenReturn(Optional.of(associate));
 
         Assertions.assertThrows(RequestException.class, ()->{
             service.update(ID,associateDTO);

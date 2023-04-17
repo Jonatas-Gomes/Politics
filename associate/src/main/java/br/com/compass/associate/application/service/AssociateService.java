@@ -24,6 +24,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 @Service
@@ -40,9 +42,11 @@ public class AssociateService implements AssociateUseCase{
 
     @Override
     public AssociateResponse createAssociate(AssociateDTO associateDTO) {
-        if(associateDTO.getBirthday().isAfter(LocalDate.now())){
-            throw new RequestException("invalid birthday", HttpStatus.BAD_REQUEST);
+        Period period = Period.between(associateDTO.getBirthday(), LocalDate.now());
+        if(period.getYears() < 16){
+            throw new RequestException("Invalid birthday, associate must be at least 16 years old! ", HttpStatus.BAD_REQUEST);
         }
+
         var associate = mapperUtils.mapAssociateDtoToAssociate(associateDTO);
         portOut.save(associate);
         return mapperUtils.mapAssociateToAssociateResponse(associate);
@@ -82,11 +86,12 @@ public class AssociateService implements AssociateUseCase{
 
     @Override
     public AssociateResponse update(Long id, AssociateDTO associateDTO) throws JsonProcessingException {
-        var associate = getAssociate(id);
-
-        if(associateDTO.getBirthday().isAfter(LocalDate.now())){
-            throw new RequestException("invalid birthday", HttpStatus.BAD_REQUEST);
+        Period period = Period.between(associateDTO.getBirthday(), LocalDate.now());
+        if(period.getYears() < 16){
+            throw new RequestException("Invalid birthday, associate must be at least 16 years old! ", HttpStatus.BAD_REQUEST);
         }
+
+        var associate = getAssociate(id);
 
         mapperUtils.associateUpdateMapping(associate, associateDTO);
 
