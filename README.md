@@ -60,6 +60,23 @@
 - #### POST Response
   <img width="636" alt="image" src="https://user-images.githubusercontent.com/57242457/232549809-54c0737d-df2e-4039-9db7-52b03c273b8f.png">
 
-
+- #### PUT
+      
+ ```
+ curl --location --request PUT 'localhost:8081/parties/p09918' \
+--header 'Content-Type: application/json' \
+--data '{
+    "partyName": "Partido Comunista do Brasil",
+    "acronym": "PCdoB",
+    "ideology": "Left",
+    "foundationDate": "2022/04/25"
+}'
+  
+ ```
+ 
+ <img width="631" alt="image" src="https://user-images.githubusercontent.com/57242457/232551995-2edb015a-1212-4ea5-bef9-7e8fe7f774e0.png">
+ 
+- #### PUT Response
+  <img width="620" alt="image" src="https://user-images.githubusercontent.com/57242457/232552992-a68fd10b-ef97-4826-941b-64ce1437b07b.png">
   
    
