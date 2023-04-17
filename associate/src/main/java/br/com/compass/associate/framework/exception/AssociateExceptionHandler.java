@@ -17,8 +17,10 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 @RequiredArgsConstructor
 @RestControllerAdvice
@@ -70,6 +72,11 @@ public class AssociateExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object>handleUnexpectedTypeException(UnexpectedTypeException exception){
         var response = ErrorMessage.builder().message("unexpected field type, check the filled fields").build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+    @ExceptionHandler(UnknownHostException.class)
+    public ResponseEntity<Object> handleUnknownHostException(UnknownHostException ex){
+        var response = ErrorMessage.builder().message("server inaccessible, please try again later").build();
+        return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(response);
     }
 
 }
