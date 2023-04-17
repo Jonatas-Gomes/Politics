@@ -1,0 +1,331 @@
+openapi: 3.0.1
+info:
+  title: Microservice Associate
+  description: API to register and manage associate
+  version: 0.0.1
+  contact:
+    name: Dev
+    email: jonata.gomes2014@hotmail.com
+externalDocs:
+  description: Documentation in GitHub
+  url: https://github.com/Jonatas-Gomes/Politics
+  
+servers: 
+- url: http://localhost:8082
+
+paths:
+  /associates:
+    post:
+      summary: Create Associate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssociateDTO'
+      responses:
+        201:
+          description: Created!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssociateResponse'
+        400:
+           $ref: '#/components/responses/Response400'
+    get:
+      summary: Return all associates
+      parameters:
+        - name: politicalOffice
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/PoliticalOffice'
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        200:
+          description: OK!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageableResponse'
+        400:
+          $ref: '#/components/responses/Response400'
+  /associates/{id}:
+    get:
+      summary: Return one associate
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        200:
+          $ref: '#/components/responses/Response200'
+        400:
+          $ref: '#/components/responses/Response400'
+    put:
+      summary: Update associate
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssociateDTO'
+      responses:
+        200:
+          $ref: '#/components/responses/Response200'
+        400:
+          $ref: '#/components/responses/Response200'
+    delete:
+      summary: Delete one associate
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: 
+            type: integer
+            format: int64
+            example: 1
+      responses:
+        204:
+          description: No Content
+        400:
+          $ref: '#/components/responses/Response400'  
+  /associates/parties:
+    get:
+      summary: Return all parties
+      responses:
+        200:
+          description: OK!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageablePartyResponse'
+        400:
+          $ref: '#/components/responses/Response400'  
+  /associates/{idAssociate}/parties/{idParty}:
+    delete:
+      summary: Delete association
+      parameters:
+        - name: idAssociate
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+        - name: idParty
+          in: path
+          required: true
+          schema:
+            type: string
+            example: p410908
+      responses:
+        204:
+          description: No Content
+        400:
+          $ref: '#/components/responses/Response400'
+  
+components:
+  schemas:
+    Ideology:
+      type: string
+      enum:
+        - Right
+        - Center
+        - Left
+   
+    AssociateDTO:
+      type: object
+      properties:
+        fullName:
+          type: string
+          example: Ednaldo Pererira
+        politicalOffice:
+          $ref: '#/components/schemas/PoliticalOffice'
+        birthday:
+          type: string
+          format: date
+          example: 1988-04-27
+        sex:
+          $ref: '#/components/schemas/Sex'
+      
+    PartyDTO:
+      type: object
+      properties:
+        idParty:
+          type: string
+        partyName:
+          type: string
+        acronym:
+          type: string
+        ideology:
+          $ref: '#/components/schemas/Ideology'
+        foundationDate:
+          type: string
+          format: date
+      
+    
+    PageableResponse:
+      type: object
+      properties:
+        numberOfElements:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        associates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Associate'
+    Pageable:
+      type: object
+      properties:
+        page:
+          minimum: 0
+          type: integer
+          format: int32
+          default: 0
+        size:
+          minimum: 1
+          type: integer
+          format: int32
+          default: 20
+        sort:
+          type: array
+          items:
+            type: string
+
+    AssociateResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        fullName: 
+          type: string
+          example: Ednaldo Pereira
+        politicalOffice:
+          $ref: '#/components/schemas/PoliticalOffice'
+        birthday:
+          type: string
+          format: date
+          example: 1988-04-27
+        sex:
+          $ref: '#/components/schemas/Sex'
+          example: Male
+    Associate:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        fullName: 
+          type: string
+          example: Ednaldo Pereira
+        politicalOffice:
+          $ref: '#/components/schemas/PoliticalOffice'
+        birthday:
+          type: string
+          format: date
+          example: 1988-04-27
+        sex:
+          $ref: '#/components/schemas/Sex'
+          
+    Sex:
+      type: string
+      enum:
+        - Male
+        - Female
+    PoliticalOffice:
+      type: string
+      enum:
+        - Alderman
+        - Mayor
+        - State_Deputy
+        - Federal_Deputy
+        - Senator
+        - Governor
+        - President
+        - None
+    ErrorMessage:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        message:
+          type: string
+          example: associated with this id not found
+    ExceptionValidResponse:
+      type: object
+      properties:
+        field:
+          type: string
+          example: fullName
+        error:
+          type: string
+          example: this field cannot be null
+    ListExceptionValidResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/ExceptionValidResponse'
+    PageablePartyResponse:
+      type: object
+      properties:
+        numberOfElements:
+          type: integer
+          format: int32
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        parties:
+          type: array
+          items:
+            $ref: '#/components/schemas/PartyDTO'
+  responses:
+    Response400:
+      description: BeanValidation | RequestException
+      content:
+        application/json:
+          schema:
+            oneOf:
+              -  $ref: '#/components/schemas/ErrorMessage'
+              -  $ref: '#/components/schemas/ListExceptionValidResponse'
+    
+    Response200:
+      description: OK!
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AssociateResponse'
+  
+
+                
+            
+    
+        
+      
+  
